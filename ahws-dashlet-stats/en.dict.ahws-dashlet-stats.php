@@ -25,5 +25,11 @@ Dict::Add('EN US', 'English', 'English', array(
 	'UI:DashletStats:Prop:UnitPosition' => 'Unit position',
 	'UI:DashletStats:Prop:Function:PercentageQuery' => 'Percentage query',
 
+
+	'UI:DashletStatsCompare:Label' => 'Dashlet Stats Compare',
+	'UI:DashletStatsCompare:Description' => 'A dashlet badge comparing two aggregate function',
+	'UI:DashletStatsCompare:Prop:CompareQuery' => 'Compare query',
+	'UI:DashletStatsCompare:Prop:PercentageCompareQuery' => 'Percentage compare query',
+
 ));
 ?>

@@ -27,6 +27,8 @@ SetupWebPage::AddModule(
 			'src/DashletStatsUIExtension.php',
 			'src/DashletStats.php',
 			'src/DashletStatsView.php',
+			'src/DashletStatsCompare.php',
+			'src/DashletStatsCompareView.php'
 		),
 		'webservice' => array(
 			
