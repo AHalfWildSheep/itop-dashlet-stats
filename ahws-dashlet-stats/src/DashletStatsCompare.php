@@ -38,7 +38,7 @@ class DashletStatsCompare extends DashletStats{
 
 		$oField = new DesignerComboField('compare_unit', Dict::S('UI:DashletStatsCompare:Prop:CompareUnit'), $this->aProperties['compare_unit']);
 		$oField->SetMandatory();
-		$oField->SetAllowedValues(array('delta' => 'Difference', 'percentage' => 'Percentage'));
+		$oField->SetAllowedValues(array('delta' => Dict::S('UI:DashletStatsCompare:Prop:CompareUnit:Difference'), 'percentage' => Dict::S('UI:DashletStatsCompare:Prop:CompareUnit:Percentage')));
 		$oForm->AddField($oField);
 
 		$aFunctionsWithAttribute = array(
@@ -71,7 +71,7 @@ class DashletStatsCompare extends DashletStats{
 			$oSubForm->AddField($oField);
 			$oField = new DesignerComboField('unit_position', Dict::S('UI:DashletStats:Prop:UnitPosition'), $this->aProperties['unit_position']);
 			$oField->SetMandatory();
-			$oField->SetAllowedValues(array('before' => 'Before', 'after' => 'After'));
+			$oField->SetAllowedValues(array('before' => Dict::S('UI:DashletStats:Prop:UnitPosition:Before'), 'after' => Dict::S('UI:DashletStats:Prop:UnitPosition:After')));
 			$oSubForm->AddField($oField);
 			$oSelectorField->AddSubForm($oSubForm, $sLabel, $sFct);
 		}

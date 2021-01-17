@@ -67,7 +67,7 @@ class DashletStats extends Dashlet
 			$oSubForm->AddField($oField);
 			$oField = new DesignerComboField('unit_position', Dict::S('UI:DashletStats:Prop:UnitPosition'), $this->aProperties['unit_position']);
 			$oField->SetMandatory();
-			$oField->SetAllowedValues(array('before' => 'Before', 'after' => 'After'));
+			$oField->SetAllowedValues(array('before' => Dict::S('UI:DashletStats:Prop:UnitPosition:Before'), 'after' => Dict::S('UI:DashletStats:Prop:UnitPosition:After')));
 			$oSubForm->AddField($oField);
 			$oSelectorField->AddSubForm($oSubForm, $sLabel, $sFct);
 		}
