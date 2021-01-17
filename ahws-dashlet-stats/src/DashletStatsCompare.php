@@ -133,23 +133,28 @@ class DashletStatsCompare extends DashletStats{
 		$oCompareFilter->SetShowObsoleteData(utils::ShowObsoleteData());
 		
 		$oCompareSet = new DBObjectSet($oCompareFilter);
-		
-		$sDashletValue = 0;
-		$sDashletDelta = 0;
+
+		$sDashletValue = Dict::S('UI:DashletStats:Value');
+		$sDashletDelta = Dict::S('UI:DashletStats:Value');
 		switch($sFunction){
 			case 'count':
 				$iCount = $oSet->Count();
 				$sDashletValue = $iCount;
 				
 				$iCompareCount = $oCompareSet->Count();
-				$sDashletDelta = ($sCompareUnit === 'delta' ? $iCount - $iCompareCount : round((($iCount * 100) / $iCompareCount), 2)) - 100;
+				if($sCompareUnit === 'delta' ){
+					$sDashletDelta = $iCount - $iCompareCount;
+				}
+				elseif ($iCompareCount !== 0)
+				{
+					$sDashletDelta = round((($iCount * 100) / $iCompareCount), 2) - 100;
+				}	
 				break;
 			case 'max':
 				$iMaxValue = null;
 				while($oObject = $oSet->Fetch())
 				{
 					$iMaxValue = ($iMaxValue === null ? $oObject->Get($sAttr) : max($iMaxValue, $oObject->Get($sAttr)));
-
 				}
 				$iCompareMaxValue = null;
 				while($oCompareObject = $oCompareSet->Fetch())
@@ -159,7 +164,13 @@ class DashletStatsCompare extends DashletStats{
 				}
 			
 				$sDashletValue = $iMaxValue;
-				$sDashletDelta = ($sCompareUnit === 'delta' ? $iMaxValue - $iCompareMaxValue : round((($iMaxValue * 100) / $iCompareMaxValue), 2)) - 100;
+				if($sCompareUnit === 'delta' ){
+					$sDashletDelta = $iMaxValue - $iCompareMaxValue;
+				}
+				elseif ($iCompareMaxValue !== 0)
+				{
+					$sDashletDelta = round((($iMaxValue * 100) / $iCompareMaxValue), 2) - 100;
+				}
 				break;
 			case 'min':
 				$iMinValue = null;
@@ -175,7 +186,13 @@ class DashletStatsCompare extends DashletStats{
 				}
 			
 				$sDashletValue = $iMinValue;
-				$sDashletDelta = ($sCompareUnit === 'delta' ?  $iMinValue - $iCompareMinValue: round((($iMinValue * 100) / $iCompareMinValue), 2)) - 100;
+				if($sCompareUnit === 'delta' ){
+					$sDashletDelta = $iMinValue - $iCompareMinValue;
+				}
+				elseif ($iCompareMinValue !== 0)
+				{
+					$sDashletDelta = round((($iMinValue * 100) / $iCompareMinValue), 2) - 100;
+				}
 				break;
 			case 'avg':
 				$iCount = $oSet->Count();
@@ -192,9 +209,16 @@ class DashletStatsCompare extends DashletStats{
 				{
 					$iCompareTotalValue = ($iCompareTotalValue === null ? $oCompareObject->Get($sAttr) : $iCompareTotalValue + $oCompareObject->Get($sAttr));
 				}
-			
-				$sDashletValue = round($iTotalValue/$iCount, 2);
-				$sDashletDelta = ($sCompareUnit === 'delta' ?  round(($iTotalValue/$iCount - $iCompareTotalValue/$iCompareCount), 2) : round(((($iTotalValue/$iCount) * 100) / ($iCompareTotalValue/$iCompareCount)), 2) - 100) ;
+				if($iCount !== 0){
+					$sDashletValue = round($iTotalValue/$iCount, 2);
+				}
+				if($sCompareUnit === 'delta' && $iCount !== 0 && $iCompareCount !== 0){
+					$sDashletDelta =  round(($iTotalValue/$iCount - $iCompareTotalValue/$iCompareCount), 2);
+				}
+				elseif ($sCompareUnit === 'percentage' && $iCount !== 0 && $iCompareCount !== 0)
+				{
+					$sDashletDelta = round(((($iTotalValue/$iCount) * 100) / ($iCompareTotalValue/$iCompareCount)), 2) - 100;
+				}
 				break;
 			case 'sum':
 				$iTotalValue = null;
@@ -209,7 +233,13 @@ class DashletStatsCompare extends DashletStats{
 				}
 			
 				$sDashletValue = $iTotalValue;
-				$sDashletDelta =  ($sCompareUnit === 'delta' ? $iTotalValue - $iCompareTotalValue: round((($iTotalValue * 100) / $iCompareTotalValue), 2) - 100);;
+				if($sCompareUnit === 'delta'){
+					$sDashletDelta =  $iTotalValue - $iCompareTotalValue;
+				}
+				elseif ($sCompareUnit === 'percentage' && $iCompareTotalValue !== 0)
+				{
+					$sDashletDelta = round((($iTotalValue * 100) / $iCompareTotalValue), 2) - 100;
+				}
 				break;
 			case 'percentage':
 				$oPercentageFilter = DBObjectSearch::FromOQL($sPercentageQuery, $aQueryParams);
@@ -219,11 +249,15 @@ class DashletStatsCompare extends DashletStats{
 				$oComparePercentageFilter = DBObjectSearch::FromOQL($sPercentageCompareQuery, $aQueryParams);
 				$oComparePercentageFilter->SetShowObsoleteData(utils::ShowObsoleteData());
 				$oComparePercentageSet = new DBObjectSet($oComparePercentageFilter);
-				
-				
-				
-				$sDashletValue = round((($oSet->Count() * 100) / $oPercentageSet->Count()), 2);
-				$sDashletDelta = (($oSet->Count() * 100) / $oPercentageSet->Count()) - (($oCompareSet->Count() * 100) / $oComparePercentageSet->Count());
+
+
+
+				if($oPercentageSet->Count()){
+					$sDashletValue = round((($oSet->Count() * 100) / $oPercentageSet->Count()), 2);
+				}
+				if($oPercentageSet->Count() && $oComparePercentageSet->Count()){
+					$sDashletDelta = (($oSet->Count() * 100) / $oPercentageSet->Count()) - (($oCompareSet->Count() * 100) / $oComparePercentageSet->Count());
+				}
 				$sCompareUnit = 'percentage';
 				break;
 		}
