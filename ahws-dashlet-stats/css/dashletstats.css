@@ -1,0 +1,34 @@
+.ahws-dashlet-stats {
+  background-color: white;
+  padding: 4px 0;
+}
+.ahws-dashlet-stats > a {
+  display: flex;
+  text-decoration: none;
+}
+.ahws-dashlet-stats > a:hover {
+  text-decoration: none;
+}
+.ahws-dashlet-stats--icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 6px;
+}
+.ahws-dashlet-stats--details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.ahws-dashlet-stats--details--title {
+  color: #6B7280;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0 0 4px;
+}
+.ahws-dashlet-stats--details--value {
+  text-decoration: none;
+  color: #111827;
+  font-weight: 600;
+  font-size: 20px;
+}

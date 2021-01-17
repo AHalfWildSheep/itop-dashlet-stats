@@ -1,0 +1,38 @@
+$ahws-dashlet-stats--white: white;
+$ahws-dashlet-stats--grey: #6B7280;
+$ahws-dashlet-stats--black: #111827;
+
+.ahws-dashlet-stats{
+  background-color: $ahws-dashlet-stats--white;
+  padding: 4px 0;
+  >a {
+    display: flex;
+    text-decoration: none;
+    &:hover{
+      text-decoration: none;
+    }
+  }
+}
+.ahws-dashlet-stats--icon{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 6px;
+}
+.ahws-dashlet-stats--details{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.ahws-dashlet-stats--details--title {
+  color: $ahws-dashlet-stats--grey;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0 0 4px;
+}
+.ahws-dashlet-stats--details--value {
+  text-decoration: none;
+  color: $ahws-dashlet-stats--black;
+  font-weight: 600;
+  font-size: 20px;
+}
