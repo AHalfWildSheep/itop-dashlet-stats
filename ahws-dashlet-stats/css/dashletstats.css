@@ -34,21 +34,27 @@
 }
 .ahws-dashlet-compare-stats--delta {
   display: inline-block;
-  font-size: 12px;
+  font-size: 14px;
   border-radius: 5px;
   padding: 2px 4px;
-  margin: 3px 0;
+  margin: 2px 4px;
   vertical-align: bottom;
 }
 .ahws-dashlet-compare-stats--delta.ahws-dashlet-compare-stats--delta-positive {
   background-color: #A7F3D0;
-  color: #065F46;
+  color: #064E3B;
+}
+.ahws-dashlet-compare-stats--delta.ahws-dashlet-compare-stats--delta-positive > i {
+  color: #047857;
 }
 .ahws-dashlet-compare-stats--delta.ahws-dashlet-compare-stats--delta-negative {
   background-color: #FECACA;
-  color: #991B1B;
+  color: #7F1D1D;
+}
+.ahws-dashlet-compare-stats--delta.ahws-dashlet-compare-stats--delta-negative > i {
+  color: #DC2626;
 }
 .ahws-dashlet-compare-stats--delta > i {
-  font-size: 10px;
-  padding-right: 2px;
+  font-size: 13px;
+  padding-right: 4px;
 }
