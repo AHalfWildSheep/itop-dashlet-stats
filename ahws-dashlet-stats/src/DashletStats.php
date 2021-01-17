@@ -16,6 +16,18 @@ class DashletStats extends Dashlet
 	/**
 	 * @inheritdoc
 	 */
+	static public function GetInfo()
+	{
+		return array(
+			'label' => Dict::S('UI:DashletStats:Label'),
+			'icon' => 'env-'.utils::GetCurrentEnvironment().'/ahws-dashlet-stats/img/icons8-calculator-96.png',
+			'description' => Dict::S('UI:DashletStats:Description'),
+		);
+	}
+	
+	/**
+	 * @inheritdoc
+	 */
 	public function GetPropertiesFields(DesignerForm $oForm)
 	{
 		$oField = new DesignerTextField('title', Dict::S('UI:DashletStats:Prop:Title'), $this->aProperties['title']);
