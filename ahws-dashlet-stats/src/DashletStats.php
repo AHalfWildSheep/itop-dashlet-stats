@@ -163,7 +163,7 @@ class DashletStats extends Dashlet
 		$sClass = $oFilter->GetClass();
 		
 		$oSet = new DBObjectSet($oFilter);
-		$sDashletValue = 0;
+		$sDashletValue = Dict::S('UI:DashletStats:Value');
 		switch($sFunction){
 			case 'count':
 				$iCount = $oSet->Count();
@@ -192,9 +192,11 @@ class DashletStats extends Dashlet
 				while($oObject = $oSet->Fetch())
 				{
 					$iTotalValue = ($iTotalValue === null ? $oObject->Get($sAttr) : $iTotalValue + $oObject->Get($sAttr));
-
 				}
-				$sDashletValue = $iTotalValue/$iCount;
+				if($iCount !== 0)
+				{
+					$sDashletValue = $iTotalValue/$iCount;
+				}
 				break;
 			case 'sum':
 				$oTotalValue = null;
@@ -208,7 +210,9 @@ class DashletStats extends Dashlet
 				$oCompareFilter = DBObjectSearch::FromOQL($sPercentageQuery, $aQueryParams);
 				$oCompareFilter->SetShowObsoleteData(utils::ShowObsoleteData());
 				$oCompareSet = new DBObjectSet($oCompareFilter);
-				$sDashletValue = round((($oSet->Count() * 100) / $oCompareSet->Count()), 2);
+				if($oCompareSet->Count() !== 0){
+					$sDashletValue = round((($oSet->Count() * 100) / $oCompareSet->Count()), 2);
+				}
 				break;
 		}
 		
