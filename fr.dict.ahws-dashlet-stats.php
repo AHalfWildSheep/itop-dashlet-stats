@@ -31,7 +31,7 @@ Dict::Add('FR FR', 'French', 'Français', array(
 	'UI:DashletStatsCompare:Label' => 'Dashlet de stats. comparatives',
 	'UI:DashletStatsCompare:Description' => 'Dashlet badge pour comparer deux fonctions d\'aggrégation',
 	'UI:DashletStatsCompare:Prop:CompareQuery' => 'Requête de comparaison',
-	'UI:DashletStatsCompare:Prop:CompareUnit' => 'Unité de comparaison del\'écart',
+	'UI:DashletStatsCompare:Prop:CompareUnit' => 'Unité de comparaison de l\'écart',
 	'UI:DashletStatsCompare:Prop:CompareUnit:Difference' => 'Différence',
 	'UI:DashletStatsCompare:Prop:CompareUnit:Difference' => 'Pourcentage',
 	'UI:DashletStatsCompare:Prop:PercentageCompareQuery' => 'Requête de comparaison en pourcentage',
