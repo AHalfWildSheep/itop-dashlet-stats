@@ -49,6 +49,7 @@ SetupWebPage::AddModule(
 		//
 		'settings' => array(
 			// Module specific settings go here, if any
+			'allow_string_attribute' => false,
 		),
 	)
 );

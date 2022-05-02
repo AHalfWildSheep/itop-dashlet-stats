@@ -1,4 +1,7 @@
 <?php
+
+use Combodo\iTop\Application\UI\Base\Component\Html\Html;
+
 class DashletStats extends Dashlet
 {
 	public function __construct($oModelReflection, $sId)
@@ -11,6 +14,8 @@ class DashletStats extends Dashlet
 		$this->aProperties['unit'] = '';
 		$this->aProperties['unit_position'] = 'after';
 		$this->aProperties['percentage_query'] = '';
+		$this->aCSSClasses[] = 'ibo-dashlet--is-inline';
+		$this->aCSSClasses[] = 'ibo-dashlet-badge';
 	}
 
 	/**
@@ -20,7 +25,7 @@ class DashletStats extends Dashlet
 	{
 		return array(
 			'label' => Dict::S('UI:DashletStats:Label'),
-			'icon' => 'env-'.utils::GetCurrentEnvironment().'/ahws-dashlet-stats/img/icons8-calculator-96.png',
+			'icon' => 'env-'.utils::GetCurrentEnvironment().'/ahws-dashlet-stats/img/icons8-math-96.png',
 			'description' => Dict::S('UI:DashletStats:Description'),
 		);
 	}
@@ -63,10 +68,8 @@ class DashletStats extends Dashlet
 			$oField->SetAllowedValues($aFunctionAttributes);
 			$oSubForm->AddField($oField);
 			$oField = new DesignerTextField('unit', Dict::S('UI:DashletStats:Prop:Unit'), $this->aProperties['unit']);
-			$oField->SetMandatory();
 			$oSubForm->AddField($oField);
 			$oField = new DesignerComboField('unit_position', Dict::S('UI:DashletStats:Prop:UnitPosition'), $this->aProperties['unit_position']);
-			$oField->SetMandatory();
 			$oField->SetAllowedValues(array('before' => Dict::S('UI:DashletStats:Prop:UnitPosition:Before'), 'after' => Dict::S('UI:DashletStats:Prop:UnitPosition:After')));
 			$oSubForm->AddField($oField);
 			$oSelectorField->AddSubForm($oSubForm, $sLabel, $sFct);
@@ -105,6 +108,17 @@ class DashletStats extends Dashlet
 					case 'AttributeSubItem': // TODO: Known limitation: no unit displayed (values in sec)
 						$sLabel = $this->oModelReflection->GetLabel($sClass, $sAttCode);
 						$aFunctionAttributes[$sAttCode] = $sLabel;
+						break;
+					case 'AttributeString':
+					case 'AttributeEnum':
+					case 'AttributeText':
+					case 'AttributeLongText':
+					case 'AttributeEncryptedString':
+						if(MetaModel::GetModuleSetting('ahws-dashlet-stats', 'allow_string_attribute', 'false') === true)
+						{
+							$sLabel = $this->oModelReflection->GetLabel($sClass, $sAttCode);
+							$aFunctionAttributes[$sAttCode] = $sLabel;
+						}
 						break;
 				}
 			}
@@ -173,7 +187,10 @@ class DashletStats extends Dashlet
 				$iMaxValue = null;
 				while($oObject = $oSet->Fetch())
 				{
-					$iMaxValue = ($iMaxValue === null ? $oObject->Get($sAttr) : max($iMaxValue, $oObject->Get($sAttr)));
+					$iObjectValue = $oObject->Get($sAttr);
+					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
+
+					$iMaxValue = ($iMaxValue === null ? $iObjectValue : max($iMaxValue, $iObjectValue));
 
 				}
 				$sDashletValue = $iMaxValue;
@@ -182,7 +199,10 @@ class DashletStats extends Dashlet
 				$iMinValue = null;
 				while($oObject = $oSet->Fetch())
 				{
-					$iMinValue = ($iMinValue === null ? $oObject->Get($sAttr) : min($iMinValue, $oObject->Get($sAttr)));
+					$iObjectValue = $oObject->Get($sAttr);
+					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
+
+					$iMinValue = ($iMinValue === null ? $iObjectValue : min($iMinValue, $iObjectValue));
 				}
 				$sDashletValue = $iMinValue;
 				break;
@@ -191,7 +211,10 @@ class DashletStats extends Dashlet
 				$iTotalValue = null;
 				while($oObject = $oSet->Fetch())
 				{
-					$iTotalValue = ($iTotalValue === null ? $oObject->Get($sAttr) : $iTotalValue + $oObject->Get($sAttr));
+					$iObjectValue = $oObject->Get($sAttr);
+					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
+
+					$iTotalValue = ($iTotalValue === null ? $iObjectValue : $iTotalValue + $iObjectValue);
 				}
 				if($iCount !== 0)
 				{
@@ -199,12 +222,14 @@ class DashletStats extends Dashlet
 				}
 				break;
 			case 'sum':
-				$oTotalValue = null;
+				$iTotalValue = null;
 				while($oObject = $oSet->Fetch())
 				{
-					$oTotalValue = ($oTotalValue === null ? $oObject->Get($sAttr) : $oTotalValue + $oObject->Get($sAttr));
+					$iObjectValue = $oObject->Get($sAttr);
+					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
+					$iTotalValue = ($iTotalValue === null ? $iObjectValue : $iTotalValue + $iObjectValue);
 				}
-				$sDashletValue = $oTotalValue;
+				$sDashletValue = $iTotalValue;
 				break;
 			case 'percentage':
 				$oCompareFilter = DBObjectSearch::FromOQL($sPercentageQuery, $aQueryParams);
@@ -216,10 +241,9 @@ class DashletStats extends Dashlet
 				break;
 		}
 		
-		$sDashletValue = ($sUnitPosition === 'before' ? $sUnit.$sDashletValue : $sDashletValue.$sUnit);
 		 
 		
-		$oDashletView = new DashletStatsView($sTitle,	$sDashletValue, $sClass, $oFilter);
-		$oDashletView->Display($oPage, 'block_'.$this->sId.($bEditMode ? '_edit' : ''),	$bEditMode);
+		$oDashletView = new DashletStatsView($sTitle, $sDashletValue, $sClass, $oFilter, $sUnit, $sUnitPosition);
+		return new Html($oDashletView->Display($oPage, 'block_'.$this->sId.($bEditMode ? '_edit' : ''),	$bEditMode));
 	}
 }

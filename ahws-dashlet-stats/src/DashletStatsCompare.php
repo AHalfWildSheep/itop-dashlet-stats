@@ -1,4 +1,7 @@
-<?php 
+<?php
+
+use Combodo\iTop\Application\UI\Base\Component\Html\Html;
+
 class DashletStatsCompare extends DashletStats{
 	public function __construct($oModelReflection, $sId)
 	{
@@ -6,6 +9,8 @@ class DashletStatsCompare extends DashletStats{
 		$this->aProperties['compare_query'] = 'SELECT ';
 		$this->aProperties['compare_unit'] = '';
 		$this->aProperties['percentage_compare_query'] = 'SELECT ';
+		$this->aCSSClasses[] = 'ibo-dashlet--is-inline';
+		$this->aCSSClasses[] = 'ibo-dashlet-badge';
 	}
 
 	/**
@@ -15,7 +20,7 @@ class DashletStatsCompare extends DashletStats{
 	{
 		return array(
 			'label' => Dict::S('UI:DashletStatsCompare:Label'),
-			'icon' => 'env-'.utils::GetCurrentEnvironment().'/ahws-dashlet-stats/img/icons8-statistics-48.png',
+			'icon' => 'env-'.utils::GetCurrentEnvironment().'/ahws-dashlet-stats/img/icons8-account-96.png',
 			'description' => Dict::S('UI:DashletStatsCompare:Description'),
 		);
 	}
@@ -67,10 +72,8 @@ class DashletStatsCompare extends DashletStats{
 			$oField->SetAllowedValues($aFunctionAttributes);
 			$oSubForm->AddField($oField);
 			$oField = new DesignerTextField('unit', Dict::S('UI:DashletStats:Prop:Unit'), $this->aProperties['unit']);
-			$oField->SetMandatory();
 			$oSubForm->AddField($oField);
 			$oField = new DesignerComboField('unit_position', Dict::S('UI:DashletStats:Prop:UnitPosition'), $this->aProperties['unit_position']);
-			$oField->SetMandatory();
 			$oField->SetAllowedValues(array('before' => Dict::S('UI:DashletStats:Prop:UnitPosition:Before'), 'after' => Dict::S('UI:DashletStats:Prop:UnitPosition:After')));
 			$oSubForm->AddField($oField);
 			$oSelectorField->AddSubForm($oSubForm, $sLabel, $sFct);
@@ -154,12 +157,18 @@ class DashletStatsCompare extends DashletStats{
 				$iMaxValue = null;
 				while($oObject = $oSet->Fetch())
 				{
-					$iMaxValue = ($iMaxValue === null ? $oObject->Get($sAttr) : max($iMaxValue, $oObject->Get($sAttr)));
+					$iObjectValue = $oObject->Get($sAttr);
+					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
+
+					$iMaxValue = ($iMaxValue === null ? $iObjectValue : max($iMaxValue, $iObjectValue));
 				}
 				$iCompareMaxValue = null;
 				while($oCompareObject = $oCompareSet->Fetch())
 				{
-					$iCompareMaxValue = ($iCompareMaxValue === null ? $oCompareObject->Get($sAttr) : max($iCompareMaxValue, $oCompareObject->Get($sAttr)));
+					$iObjectValue = $oCompareObject->Get($sAttr);
+					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
+
+					$iCompareMaxValue = ($iCompareMaxValue === null ? $iObjectValue : max($iCompareMaxValue, $iObjectValue));
 
 				}
 			
@@ -176,12 +185,18 @@ class DashletStatsCompare extends DashletStats{
 				$iMinValue = null;
 				while($oObject = $oSet->Fetch())
 				{
-					$iMinValue = ($iMinValue === null ? $oObject->Get($sAttr) : min($iMinValue, $oObject->Get($sAttr)));
+					$iObjectValue = $oObject->Get($sAttr);
+					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
+
+					$iMinValue = ($iMinValue === null ? $iObjectValue : min($iMinValue, $iObjectValue));
 				}
 				$iCompareMinValue = null;
 				while($oCompareObject = $oCompareSet->Fetch())
 				{
-					$iCompareMinValue = ($iCompareMinValue === null ? $oCompareObject->Get($sAttr) : min($iCompareMinValue, $oCompareObject->Get($sAttr)));
+					$iObjectValue = $oCompareObject->Get($sAttr);
+					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
+
+					$iCompareMinValue = ($iCompareMinValue === null ? $iObjectValue : min($iCompareMinValue, $iObjectValue));
 
 				}
 			
@@ -199,7 +214,10 @@ class DashletStatsCompare extends DashletStats{
 				$iTotalValue = null;
 				while($oObject = $oSet->Fetch())
 				{
-					$iTotalValue = ($iTotalValue === null ? $oObject->Get($sAttr) : $iTotalValue + $oObject->Get($sAttr));
+					$iObjectValue = $oObject->Get($sAttr);
+					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
+
+					$iTotalValue = ($iTotalValue === null ? $iObjectValue : $iTotalValue + $iObjectValue);
 
 				}
 
@@ -207,7 +225,10 @@ class DashletStatsCompare extends DashletStats{
 				$iCompareTotalValue = null;
 				while($oCompareObject = $oCompareSet->Fetch())
 				{
-					$iCompareTotalValue = ($iCompareTotalValue === null ? $oCompareObject->Get($sAttr) : $iCompareTotalValue + $oCompareObject->Get($sAttr));
+					$iObjectValue = $oCompareObject->Get($sAttr);
+					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
+
+					$iCompareTotalValue = ($iCompareTotalValue === null ? $iObjectValue : $iCompareTotalValue + $iObjectValue);
 				}
 				if($iCount !== 0){
 					$sDashletValue = round($iTotalValue/$iCount, 2);
@@ -224,12 +245,18 @@ class DashletStatsCompare extends DashletStats{
 				$iTotalValue = null;
 				while($oObject = $oSet->Fetch())
 				{
-					$iTotalValue = ($iTotalValue === null ? $oObject->Get($sAttr) : $iTotalValue + $oObject->Get($sAttr));
+					$iObjectValue = $oObject->Get($sAttr);
+					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
+
+					$iTotalValue = ($iTotalValue === null ? $iObjectValue : $iTotalValue + $iObjectValue);
 				}
-				$iCompareTotalValue = null;
+				$iCompareTotalValue = 0;
 				while($oCompareObject = $oCompareSet->Fetch())
 				{
-					$iCompareTotalValue = ($iCompareTotalValue === null ? $oCompareObject->Get($sAttr) : $iCompareTotalValue + $oCompareObject->Get($sAttr));
+					$iObjectValue = $oCompareObject->Get($sAttr);
+					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
+
+					$iCompareTotalValue = ($iCompareTotalValue === null ? $iObjectValue : $iCompareTotalValue + $iObjectValue);
 				}
 			
 				$sDashletValue = $iTotalValue;
@@ -256,16 +283,15 @@ class DashletStatsCompare extends DashletStats{
 					$sDashletValue = round((($oSet->Count() * 100) / $oPercentageSet->Count()), 2);
 				}
 				if($oPercentageSet->Count() && $oComparePercentageSet->Count()){
-					$sDashletDelta = (($oSet->Count() * 100) / $oPercentageSet->Count()) - (($oCompareSet->Count() * 100) / $oComparePercentageSet->Count());
+					$sDashletDelta = round((($oSet->Count() * 100) / $oPercentageSet->Count()) - (($oCompareSet->Count() * 100) / $oComparePercentageSet->Count()), 2);
 				}
 				$sCompareUnit = 'percentage';
 				break;
 		}
 		$sDashletDelta = ($sCompareUnit === 'delta' ? $sDashletDelta : ($sUnitPosition === 'before' ? '%'.$sDashletDelta : $sDashletDelta.'%'));
-		$sDashletValue = ($sUnitPosition === 'before' ? $sUnit.$sDashletValue : $sDashletValue.$sUnit);
 
 
-		$oDashletView = new DashletStatsCompareView($sTitle,	$sDashletValue,$sDashletDelta, $sClass, $oFilter);
-		$oDashletView->Display($oPage, 'block_'.$this->sId.($bEditMode ? '_edit' : ''),	$bEditMode);
+		$oDashletView = new DashletStatsCompareView($sTitle,	$sDashletValue,$sDashletDelta, $sClass, $oFilter, $sUnit, $sUnitPosition);
+		return new Html($oDashletView->Display($oPage, 'block_'.$this->sId.($bEditMode ? '_edit' : ''),	$bEditMode));
 	}
 }
