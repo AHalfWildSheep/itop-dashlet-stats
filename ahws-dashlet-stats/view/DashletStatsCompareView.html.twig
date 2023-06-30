@@ -1,0 +1,35 @@
+<a href="{{ oUIBlock.GetLinkUrl() }}">
+<div class="ibo-dashlet-badge--icon-container">
+        <img src="{{ oUIBlock.GetIconSrc() }}" class="ibo-dashlet-badge--icon ibo-class-icon ibo-is-medium"/>
+    </div>
+    <div class="ahws-dashlet-stats--details">
+        <div class="ahws-dashlet-stats--details--value">
+            {% if oUIBlock.GetValueUnitPosition() == 'before'%}
+                <span class="ahws-dashlet-stats--details--value--unit">{{ oUIBlock.GetValueUnit() }}</span>
+                <span class="ahws-dashlet-stats--details--value--realvalue">{{ oUIBlock.GetValue() }}</span>
+            {% else %}
+                <span class="ahws-dashlet-stats--details--value--realvalue">{{ oUIBlock.GetValue() }}</span>
+                <span class="ahws-dashlet-stats--details--value--unit">{{ oUIBlock.GetValueUnit() }}</span>
+            {% endif %}
+
+            {% if oUIBlock.GetDelta() > 0 %}
+                <span class="ahws-dashlet-compare-stats--delta ahws-dashlet-compare-stats--delta-positive"><i class="fas fa-arrow-up"></i>
+            {% elseif oUIBlock.GetDelta() < 0 %}
+                <span class="ahws-dashlet-compare-stats--delta ahws-dashlet-compare-stats--delta-negative"><i class="fas fa-arrow-down"></i>
+            {% else %}
+                <span class="ahws-dashlet-compare-stats--delta ahws-dashlet-compare-stats--delta-neutral"><i class="fas fa-equals"></i>
+            {% endif %}
+                {% if oUIBlock.GetDeltaUnit() == 'percentage'%}
+                    {% if oUIBlock.GetValueUnitPosition() == 'before'%}
+                        %{{ oUIBlock.GetDelta() }}
+                    {% else %}
+                        {{ oUIBlock.GetDelta() }}%
+                    {% endif %}
+                {% else %}
+                        {{ oUIBlock.GetDelta() }} a
+                {% endif %}
+                </span>
+        </div>
+        <div class="ahws-dashlet-stats--details--title">{{ oUIBlock.GetTitle() }}</div>
+    </div>
+</a>

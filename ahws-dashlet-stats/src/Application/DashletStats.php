@@ -1,6 +1,18 @@
 <?php
-
-use Combodo\iTop\Application\UI\Base\Component\Html\Html;
+use AHalfWildSheep\iTop\Extension\DashletStats\Controller\DashletStatsView;
+use AHalfWildSheep\iTop\Extension\DashletStats\Helper\StatsHelper;
+use Dashlet;
+use DBObjectSearch;
+use DBObjectSet;
+use DesignerComboField;
+use DesignerForm;
+use DesignerFormSelectorField;
+use DesignerLongTextField;
+use DesignerTextField;
+use Dict;
+use Exception;
+use MetaModel;
+use utils;
 
 class DashletStats extends Dashlet
 {
@@ -16,6 +28,7 @@ class DashletStats extends Dashlet
 		$this->aProperties['percentage_query'] = '';
 		$this->aCSSClasses[] = 'ibo-dashlet--is-inline';
 		$this->aCSSClasses[] = 'ibo-dashlet-badge';
+		$this->aCSSClasses[] = 'ahws-dashlet-stats';
 	}
 
 	/**
@@ -58,7 +71,6 @@ class DashletStats extends Dashlet
 		$oSelectorField->AddSubForm($oSubForm, Dict::S('UI:DashletStats:Prop:Function:Count'), 'count');
 
 		$aFunctionAttributes = $this->GetNumericAttributes($this->aProperties['query']);
-		IssueLog::Info(json_encode($aFunctionAttributes));
 		// Functions with attribute
 		foreach($aFunctionsWithAttribute as $sFct => $sLabel)
 		{
@@ -148,13 +160,14 @@ class DashletStats extends Dashlet
 	 */
 	public function Render($oPage, $bEditMode = false, $aExtraParams = array())
 	{
+		$aStatsExtraParams = array();
 		$sTitle = $this->aProperties['title'];
 		$sQuery = $this->aProperties['query'];
 		$sFunction = $this->aProperties['function'];
-		$sAttr = $this->aProperties['function_attribute'];
 		$sUnit = ($this->aProperties['function'] !== 'percentage' ? $this->aProperties['unit'] : '%');
 		$sUnitPosition = $this->aProperties['unit_position'];
-		$sPercentageQuery = $this->aProperties['percentage_query'];
+		$aStatsExtraParams['attr'] = $this->aProperties['function_attribute'];
+		$aStatsExtraParams['percentage_query'] = $this->aProperties['percentage_query'];
 
 
 		// First perform the query - if the OQL is not ok, it will generate an exception : no need to go further
@@ -175,75 +188,13 @@ class DashletStats extends Dashlet
 		$oFilter->SetShowObsoleteData(utils::ShowObsoleteData());
 		
 		$sClass = $oFilter->GetClass();
-		
 		$oSet = new DBObjectSet($oFilter);
-		$sDashletValue = Dict::S('UI:DashletStats:Value');
-		switch($sFunction){
-			case 'count':
-				$iCount = $oSet->Count();
-				$sDashletValue = $iCount;
-				break;
-			case 'max':
-				$iMaxValue = null;
-				while($oObject = $oSet->Fetch())
-				{
-					$iObjectValue = $oObject->Get($sAttr);
-					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
-
-					$iMaxValue = ($iMaxValue === null ? $iObjectValue : max($iMaxValue, $iObjectValue));
-
-				}
-				$sDashletValue = $iMaxValue;
-				break;
-			case 'min':
-				$iMinValue = null;
-				while($oObject = $oSet->Fetch())
-				{
-					$iObjectValue = $oObject->Get($sAttr);
-					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
-
-					$iMinValue = ($iMinValue === null ? $iObjectValue : min($iMinValue, $iObjectValue));
-				}
-				$sDashletValue = $iMinValue;
-				break;
-			case 'avg':
-				$iCount = $oSet->Count();
-				$iTotalValue = null;
-				while($oObject = $oSet->Fetch())
-				{
-					$iObjectValue = $oObject->Get($sAttr);
-					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
-
-					$iTotalValue = ($iTotalValue === null ? $iObjectValue : $iTotalValue + $iObjectValue);
-				}
-				if($iCount !== 0)
-				{
-					$sDashletValue = $iTotalValue/$iCount;
-				}
-				break;
-			case 'sum':
-				$iTotalValue = null;
-				while($oObject = $oSet->Fetch())
-				{
-					$iObjectValue = $oObject->Get($sAttr);
-					$iObjectValue = is_numeric($iObjectValue) ? $iObjectValue : 0;
-					$iTotalValue = ($iTotalValue === null ? $iObjectValue : $iTotalValue + $iObjectValue);
-				}
-				$sDashletValue = $iTotalValue;
-				break;
-			case 'percentage':
-				$oCompareFilter = DBObjectSearch::FromOQL($sPercentageQuery, $aQueryParams);
-				$oCompareFilter->SetShowObsoleteData(utils::ShowObsoleteData());
-				$oCompareSet = new DBObjectSet($oCompareFilter);
-				if($oCompareSet->Count() !== 0){
-					$sDashletValue = round((($oSet->Count() * 100) / $oCompareSet->Count()), 2);
-				}
-				break;
-		}
 		
+		$aStatsExtraParams['query_params'] = $aQueryParams;
+		
+		$sDashletValue = StatsHelper::ComputeStats($sFunction, $oSet, $aStatsExtraParams);
 		 
 		
-		$oDashletView = new DashletStatsView($sTitle, $sDashletValue, $sClass, $oFilter, $sUnit, $sUnitPosition);
-		return new Html($oDashletView->Display($oPage, 'block_'.$this->sId.($bEditMode ? '_edit' : ''),	$bEditMode));
+		return new DashletStatsView('block_'.$this->sId.($bEditMode ? '_edit' : ''), $sTitle, $sDashletValue, $sClass, $oFilter, $sUnit, $sUnitPosition);
 	}
 }

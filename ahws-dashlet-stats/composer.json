@@ -1,0 +1,8 @@
+{
+  "license": "GPLv3",
+  "autoload": {
+    "psr-4": {
+      "AHalfWildSheep\\iTop\\Extension\\DashletStats\\": "src/"
+    }
+  }
+}
