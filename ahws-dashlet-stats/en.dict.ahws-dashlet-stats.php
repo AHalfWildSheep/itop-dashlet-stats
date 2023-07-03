@@ -26,6 +26,9 @@ Dict::Add('EN US', 'English', 'English', array(
 	'UI:DashletStats:Prop:UnitPosition:Before' => 'Before',
 	'UI:DashletStats:Prop:UnitPosition:After' => 'After',
 	'UI:DashletStats:Prop:Function:PercentageQuery' => 'Percentage query',
+	
+	'UI:DashletStats:Prop:Function:Precision' => 'Precision',
+	'UI:DashletStats:Prop:Function:DividedBy' => 'Divided by',
 
 	'UI:DashletStats:Value' => 'Unknown',
 

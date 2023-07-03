@@ -26,6 +26,8 @@ class DashletStats extends Dashlet
 		$this->aProperties['unit'] = '';
 		$this->aProperties['unit_position'] = 'after';
 		$this->aProperties['percentage_query'] = '';
+		$this->aProperties['precision'] = 2;
+		$this->aProperties['divided_by'] = 1;
 		$this->aCSSClasses[] = 'ibo-dashlet--is-inline';
 		$this->aCSSClasses[] = 'ibo-dashlet-badge';
 		$this->aCSSClasses[] = 'ahws-dashlet-stats';
@@ -92,6 +94,14 @@ class DashletStats extends Dashlet
 		$oSubForm->AddField($oField);
 		$oSelectorField->AddSubForm($oSubForm, Dict::S('UI:DashletStats:Prop:Function:Percentage'), 'percentage');
 
+		$oField = new DesignerIntegerField('precision', Dict::S('UI:DashletStats:Prop:Function:Precision'), $this->aProperties['precision']);
+		$oField->SetBoundaries(null, null);
+		$oField->SetMandatory();
+		$oForm->AddField($oField);
+
+		$oField = new DesignerTextField('divided_by', Dict::S('UI:DashletStats:Prop:Function:DividedBy'), $this->aProperties['divided_by']);
+		$oField->SetMandatory();
+		$oForm->AddField($oField);
 	}
 	/**
 	 * @param string $sOql
@@ -192,8 +202,10 @@ class DashletStats extends Dashlet
 		
 		$aStatsExtraParams['query_params'] = $aQueryParams;
 		
-		$sDashletValue = StatsHelper::ComputeStats($sFunction, $oSet, $aStatsExtraParams);
-		 
+		$sDashletValue = StatsHelper::FormatValue(StatsHelper::ComputeStats($sFunction, $oSet, $aStatsExtraParams),
+			$this->aProperties['precision'],
+			$this->aProperties['divided_by']
+		);
 		
 		return new DashletStatsView('block_'.$this->sId.($bEditMode ? '_edit' : ''), $sTitle, $sDashletValue, $sClass, $oFilter, $sUnit, $sUnitPosition);
 	}

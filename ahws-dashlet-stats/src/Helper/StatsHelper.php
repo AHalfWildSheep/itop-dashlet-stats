@@ -74,7 +74,7 @@ class StatsHelper {
 				$oCompareFilter->SetShowObsoleteData(utils::ShowObsoleteData());
 				$oCompareSet = new DBObjectSet($oCompareFilter);
 				if($oCompareSet->Count() !== 0){
-					$StatsValue = round((($oSet->Count() * 100) / $oCompareSet->Count()), 2);
+					$StatsValue = ($oSet->Count() * 100) / $oCompareSet->Count();
 				}
 				break;
 		}
@@ -102,7 +102,7 @@ class StatsHelper {
 				}
 				elseif ($iCompareCount !== 0)
 				{
-					$sDashletDelta = round((($iCount * 100) / $iCompareCount), 2) - 100;
+					$sDashletDelta = (($iCount * 100) / $iCompareCount) - 100;
 				}
 				break;
 			case 'max':
@@ -130,7 +130,7 @@ class StatsHelper {
 				}
 				elseif ($iCompareMaxValue !== 0)
 				{
-					$sDashletDelta = round((($iMaxValue * 100) / $iCompareMaxValue), 2) - 100;
+					$sDashletDelta = (($iMaxValue * 100) / $iCompareMaxValue) - 100;
 				}
 				break;
 			case 'min':
@@ -158,7 +158,7 @@ class StatsHelper {
 				}
 				elseif ($iCompareMinValue !== 0)
 				{
-					$sDashletDelta = round((($iMinValue * 100) / $iCompareMinValue), 2) - 100;
+					$sDashletDelta = (($iMinValue * 100) / $iCompareMinValue) - 100;
 				}
 				break;
 			case 'avg':
@@ -183,14 +183,14 @@ class StatsHelper {
 					$iCompareTotalValue = ($iCompareTotalValue === null ? $iObjectValue : $iCompareTotalValue + $iObjectValue);
 				}
 				if($iCount !== 0){
-					$sDashletValue = round($iTotalValue/$iCount, 2);
+					$sDashletValue = $iTotalValue/$iCount;
 				}
 				if($sCompareUnit === 'delta' && $iCount !== 0 && $iCompareCount !== 0){
-					$sDashletDelta =  round(($iTotalValue/$iCount - $iCompareTotalValue/$iCompareCount), 2);
+					$sDashletDelta =  $iTotalValue/$iCount - $iCompareTotalValue/$iCompareCount;
 				}
 				elseif ($sCompareUnit === 'percentage' && $iCount !== 0 && $iCompareCount !== 0)
 				{
-					$sDashletDelta = round(((($iTotalValue/$iCount) * 100) / ($iCompareTotalValue/$iCompareCount)), 2) - 100;
+					$sDashletDelta = ((($iTotalValue/$iCount) * 100) / ($iCompareTotalValue/$iCompareCount)) - 100;
 				}
 				break;
 			case 'sum':
@@ -217,7 +217,7 @@ class StatsHelper {
 				}
 				elseif ($sCompareUnit === 'percentage' && $iCompareTotalValue !== 0)
 				{
-					$sDashletDelta = round((($iTotalValue * 100) / $iCompareTotalValue), 2) - 100;
+					$sDashletDelta = (($iTotalValue * 100) / $iCompareTotalValue) - 100;
 				}
 				break;
 			case 'percentage':
@@ -232,15 +232,18 @@ class StatsHelper {
 
 
 				if($oPercentageSet->Count()){
-					$sDashletValue = round((($oSet->Count() * 100) / $oPercentageSet->Count()), 2);
+					$sDashletValue = ($oSet->Count() * 100) / $oPercentageSet->Count();
 				}
 				if($oPercentageSet->Count() && $oComparePercentageSet->Count()){
-					$sDashletDelta = round((($oSet->Count() * 100) / $oPercentageSet->Count()) - (($oCompareSet->Count() * 100) / $oComparePercentageSet->Count()), 2);
+						$sDashletDelta = (($oSet->Count() * 100) / $oPercentageSet->Count()) - (($oCompareSet->Count() * 100) / $oComparePercentageSet->Count());
 				}
-				$sCompareUnit = 'percentage';
 				break;
 		}
 		
 		return [$sDashletValue, $sDashletDelta];
+	}
+
+	public static function FormatValue($iValue, $iPrecision, $iDividedBy){
+		return round(($iDividedBy != 0 ? $iValue / $iDividedBy : $iValue), $iPrecision);
 	}
 }

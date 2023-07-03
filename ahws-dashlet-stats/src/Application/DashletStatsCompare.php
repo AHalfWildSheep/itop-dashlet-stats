@@ -97,6 +97,14 @@ class DashletStatsCompare extends DashletStats{
 		$oSubForm->AddField($oField);
 		$oSelectorField->AddSubForm($oSubForm, Dict::S('UI:DashletStats:Prop:Function:Percentage'), 'percentage');
 
+		$oField = new DesignerIntegerField('precision', Dict::S('UI:DashletStats:Prop:Function:Precision'), $this->aProperties['precision']);
+		$oField->SetBoundaries(null, null);
+		$oField->SetMandatory();
+		$oForm->AddField($oField);
+
+		$oField = new DesignerTextField('divided_by', Dict::S('UI:DashletStats:Prop:Function:DividedBy'), $this->aProperties['divided_by']);
+		$oField->SetMandatory();
+		$oForm->AddField($oField);
 	}
 
 	/**
@@ -147,7 +155,9 @@ class DashletStatsCompare extends DashletStats{
 		$aStatsExtraParams['query_params'] = $aQueryParams;
  
 		list($sDashletValue, $iDashletDelta) = StatsHelper::ComputeCompareStats($sFunction, $oSet, $oCompareSet, $aStatsExtraParams);
-
+		$sDashletValue = StatsHelper::FormatValue($sDashletValue, $this->aProperties['precision'], $this->aProperties['divided_by']);
+		$iDashletDelta = StatsHelper::FormatValue($iDashletDelta, $this->aProperties['precision'], $this->aProperties['divided_by']);
+		
 		if($sFunction === 'percentage'){
 			$aStatsExtraParams['compare_unit'] = 'percentage';
 		}
