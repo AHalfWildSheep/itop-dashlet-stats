@@ -1,16 +1,6 @@
 <?php
 use AHalfWildSheep\iTop\Extension\DashletStats\Controller\DashletStatsCompareView;
 use AHalfWildSheep\iTop\Extension\DashletStats\Helper\StatsHelper;
-use DBObjectSearch;
-use DBObjectSet;
-use DesignerComboField;
-use DesignerForm;
-use DesignerFormSelectorField;
-use DesignerLongTextField;
-use DesignerTextField;
-use Dict;
-use MetaModel;
-use utils;
 
 class DashletStatsCompare extends DashletStats{
 	public function __construct($oModelReflection, $sId)

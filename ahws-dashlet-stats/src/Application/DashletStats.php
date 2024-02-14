@@ -1,18 +1,7 @@
 <?php
 use AHalfWildSheep\iTop\Extension\DashletStats\Controller\DashletStatsView;
 use AHalfWildSheep\iTop\Extension\DashletStats\Helper\StatsHelper;
-use Dashlet;
-use DBObjectSearch;
-use DBObjectSet;
-use DesignerComboField;
-use DesignerForm;
-use DesignerFormSelectorField;
-use DesignerLongTextField;
-use DesignerTextField;
-use Dict;
-use Exception;
-use MetaModel;
-use utils;
+
 
 class DashletStats extends Dashlet
 {

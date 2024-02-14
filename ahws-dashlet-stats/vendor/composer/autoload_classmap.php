@@ -6,11 +6,8 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'AHalfWildSheep\\iTop\\Extension\\DashletStats\\Application\\DashletStats' => $baseDir . '/src/Application/DashletStats.php',
-    'AHalfWildSheep\\iTop\\Extension\\DashletStats\\Application\\DashletStatsCompare' => $baseDir . '/src/Application/DashletStatsCompare.php',
     'AHalfWildSheep\\iTop\\Extension\\DashletStats\\Controller\\DashletStatsCompareView' => $baseDir . '/src/Controller/DashletStatsCompareView.php',
     'AHalfWildSheep\\iTop\\Extension\\DashletStats\\Controller\\DashletStatsView' => $baseDir . '/src/Controller/DashletStatsView.php',
     'AHalfWildSheep\\iTop\\Extension\\DashletStats\\Helper\\StatsHelper' => $baseDir . '/src/Helper/StatsHelper.php',
-    'AHalfWildSheep\\iTop\\Extension\\DashletStats\\Hook\\DashletStatsUIExtension' => $baseDir . '/src/Hook/DashletStatsUIExtension.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
 );

@@ -21,12 +21,9 @@ class ComposerStaticInitbd1bc6b41c34d106a05a067cfd84be42
     );
 
     public static $classMap = array (
-        'AHalfWildSheep\\iTop\\Extension\\DashletStats\\Application\\DashletStats' => __DIR__ . '/../..' . '/src/Application/DashletStats.php',
-        'AHalfWildSheep\\iTop\\Extension\\DashletStats\\Application\\DashletStatsCompare' => __DIR__ . '/../..' . '/src/Application/DashletStatsCompare.php',
         'AHalfWildSheep\\iTop\\Extension\\DashletStats\\Controller\\DashletStatsCompareView' => __DIR__ . '/../..' . '/src/Controller/DashletStatsCompareView.php',
         'AHalfWildSheep\\iTop\\Extension\\DashletStats\\Controller\\DashletStatsView' => __DIR__ . '/../..' . '/src/Controller/DashletStatsView.php',
         'AHalfWildSheep\\iTop\\Extension\\DashletStats\\Helper\\StatsHelper' => __DIR__ . '/../..' . '/src/Helper/StatsHelper.php',
-        'AHalfWildSheep\\iTop\\Extension\\DashletStats\\Hook\\DashletStatsUIExtension' => __DIR__ . '/../..' . '/src/Hook/DashletStatsUIExtension.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 
