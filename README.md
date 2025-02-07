@@ -41,8 +41,9 @@ I compared them to other organizations IPInterface in the second part of the tab
 
 
 ## Compatibility
-Tested on iTop 2.7 but it should work with earlier versions.
+Min version is now  3.1.0 as I used the [`<themes_common>` XML node](https://www.itophub.io/wiki/page?id=latest:customization:xml_reference#158).
 Legacy browser are [probably not supported](https://caniuse.com/flexbox) as I used Flexbox for display
+
 
 
 Thanks to [icons8](https://icons8.com/) for their icons 👍

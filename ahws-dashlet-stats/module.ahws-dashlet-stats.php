@@ -5,7 +5,7 @@
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'ahws-dashlet-stats/1.0.1-dev',
+	'ahws-dashlet-stats/1.1.0-dev',
 	array(
 		// Identification
 		//
@@ -26,7 +26,6 @@ SetupWebPage::AddModule(
 			'model.ahws-dashlet-stats.php',
 			'src/Application/DashletStats.php',
 			'src/Application/DashletStatsCompare.php',
-			'src/Hook/DashletStatsUIExtension.php',
 			'vendor/autoload.php',
 		),
 		'webservice' => array(

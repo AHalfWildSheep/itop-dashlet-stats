@@ -1,5 +1,5 @@
-$ahws-dashlet-stats--grey: #6B7280;
-$ahws-dashlet-stats--black: #111827;
+$ahws-dashlet-stats--grey: $ibo-body-text-color;
+$ahws-dashlet-stats--black: $ibo-body-text-color;
 
 $ahws-dashlet-compare-stats--delta-negative--background-color: var(--ibo-color-red-100);
 $ahws-dashlet-compare-stats--delta-negative--color: var(--ibo-color-red-900);
@@ -33,7 +33,7 @@ $ahws-dashlet-compare-stats--delta-neutral--icon--color: var(--ibo-color-grey-90
   justify-content: center;
 }
 .ahws-dashlet-stats--details--title {
-  color: var(--ibo-color-grey-800);
+  color: $ahws-dashlet-stats--grey;
   font-size: 1.17rem;
   margin: 0 0 4px;
   overflow-x: hidden;
@@ -43,7 +43,7 @@ $ahws-dashlet-compare-stats--delta-neutral--icon--color: var(--ibo-color-grey-90
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: var(--ibo-color-grey-900);
+  color: $ahws-dashlet-stats--black;
   font-size: 1.5rem;
 }
 .ahws-dashlet-stats--details--value--realvalue{
